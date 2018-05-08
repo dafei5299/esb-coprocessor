@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.stat.StatisticsDbMapper">
+
+	<insert id="save"><![CDATA[
+	INSERT INTO statistics_${suffix}
+		(static_esb_from, static_esb_to, static_esb_times, static_esb_bandwidth, static_date)
+	VALUES
+		(#{source}, #{system}, #{frequency}, #{throughput}, #{time})
+	]]></insert>
+
+	<select id="exists" resultType="boolean"><![CDATA[
+	SELECT
+		COUNT(1)
+	FROM
+		information_schema.TABLES
+	WHERE
+		TABLE_SCHEMA=DATABASE() AND TABLE_NAME=#{table}
+	]]></select>
+
+	<insert id="merge"><![CDATA[
+	INSERT INTO ${yearTable}
+		(static_esb_from, static_esb_to, static_esb_times, static_esb_bandwidth, static_date)
+	SELECT
+		static_esb_from, static_esb_to, SUM(static_esb_times), SUM(static_esb_bandwidth),
+		FROM_UNIXTIME(CEIL(UNIX_TIMESTAMP(static_date)/#{unit})*#{unit}) static_time
+	FROM
+		${dayTable}
+	GROUP BY
+		static_esb_from, static_esb_to, static_time
+	]]></insert>
+
+	<delete id="drop"><![CDATA[
+	DROP TABLE ${value}
+	]]></delete>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.GroupDbMapper">
+
+	<select id="findByID" resultType="GroupModel"><![CDATA[
+	SELECT
+		g.group_id      id,
+		g.group_tag     name,
+		g.sys_id        systemID,
+		g.group_allowed enable,
+		IFNULL(l.limit_delay, 0)   requestDeferred,
+		0               deferredTriggerFactor,
+		IFNULL(l.limit_request, 0)          frequencyLimit,
+		IFNULL(l.limit_request_circle, 0)   frequencyPeriod,
+		IFNULL(l.limit_bandwidth, 0)        throughputLimit,
+		IFNULL(l.limit_bandwidth_circle, 0) throughputPeriod,
+		IFNULL(l.limit_connect, 0)          connectionLimit
+	FROM
+		cfg_group g LEFT JOIN cfg_limit l ON g.limit_id=l.limit_id
+	WHERE
+		g.group_id=#{id}
+	]]></select>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		g.group_id
+	FROM
+		cfg_group g
+	]]></select>
+
+</mapper>

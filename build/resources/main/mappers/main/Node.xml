@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.NodeDbMapper">
+
+	<select id="findByID" resultType="NodeModel"><![CDATA[
+	SELECT
+		a.addr_id id,
+		a.addr    host,
+		a.port    port,
+		a.debug   debug,
+		a.weight  weight,
+		a.status  enable,
+		a.sys_id  systemID
+	FROM
+		cfg_sys_addr a
+	WHERE
+		a.addr_id=#{id}
+	]]></select>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		a.addr_id
+	FROM
+		cfg_sys_addr a
+	]]></select>
+
+</mapper>

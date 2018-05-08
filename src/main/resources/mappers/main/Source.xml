@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.SourceDbMapper">
+
+	<select id="findAuthsByID" resultType="SourceAuthModel"><![CDATA[
+	SELECT
+		al.id     id,
+		al.sys_id systemID
+	FROM
+		cfg_app_limit al
+	WHERE
+		al.app_id=#{id} AND al.app_open=1
+	]]></select>
+
+	<select id="findByID" resultMap="SourceMap"><![CDATA[
+	SELECT
+		a.app_id, a.app_key, a.app_name, a.app_allowed
+	FROM
+		cfg_app a
+	WHERE
+		a.app_id=#{id}
+	]]></select>
+
+	<resultMap id="SourceMap" type="SourceModel">
+		<id column="app_id" property="id" />
+		<result column="app_key" property="key" />
+		<result column="app_name" property="name" />
+		<result column="app_allowed" property="enable" />
+		<collection column="app_id" select="findAuthsByID"
+			property="auths" />
+	</resultMap>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		a.app_id
+	FROM
+		cfg_app a
+	]]></select>
+
+</mapper>

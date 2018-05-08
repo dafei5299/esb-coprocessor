@@ -1,0 +1,54 @@
+# DataBase
+db.main.jdbc=jdbc:mysql://10.70.33.25/esb_admin?characterEncoding=utf8
+db.main.user=neusoft
+db.main.passwd=neusoft
+db.main.idle=3600
+db.stat.jdbc=jdbc:mysql://10.70.33.25/esb_statistics?characterEncoding=utf8
+db.stat.user=neusoft
+db.stat.passwd=neusoft
+db.stat.idle=3600
+
+# Nginx
+ngx.timeout=1000
+ngx.retryDelay=1000
+ngx.maxTryTimes=3
+	# 异步服务刷新内存缓存（buffer）到转发服务缓存的周期（单位毫秒）
+ngx.flushPeriod=100
+
+# ZooKeeper
+zk.endpoints=10.70.33.36,10.70.33.37,10.70.33.47,10.70.33.57,10.70.33.67/esb
+zk.timeout=3000
+
+# Service
+instance.name=x.x.x.x:8080
+	# redis 节点的侦测周期（单位毫秒）
+redis.monitor.period=500
+scheduler.threads=5
+	# LoadTask （单位毫秒）
+load.period=1000
+	# MergeDbTask 用这个属性移除 dayTable，并将数据合并入  yearTable
+statistics.expireDays=90
+	# 暂时无效
+statistics.mergePeriod=3600
+	# forkjoinpool 并行度
+discover.parallelism=20
+	# DiscoverNgnxNode，DiscoverNode 的时间周期（单位毫秒）
+discover.period=5000
+	# DiscoverNgnxNode，DiscoverNode 连接节点的超时时间
+discover.timeout.conn=100
+	# 1 DiscoverNode 读取超时时间 2 将 latency 转为 ratio 的 factor
+discover.timeout.read=1000
+backup.script.path=/data/esb/backup/client.sh
+backup.cluster=true
+#backup.snapshot.cron=0 30 0/8 * * *
+#backup.checkpoint.cron=0 30 2 * * MON
+#backup.clear.cron=0 30 4 * * MON
+#backup.clear.days=7
+
+# SSH
+ssh.pattern=password
+ssh.IP=10.70.33.37
+ssh.user=neusoft
+ssh.password=CPF52908neu/portal
+ssh.publickeypath=
+ssh.shellscript=/data/app/esblogmanager/logdelandtar.sh

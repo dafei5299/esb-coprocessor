@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.DataCenterDbMapper">
+
+	<select id="findByCoprocessorEndpoint" resultType="DataCenterModel"><![CDATA[
+	SELECT
+		e.com_id       id,
+		d.com_name     name,
+		e.esb_async_id coprocessorID
+	FROM
+		cfg_esb_async e LEFT JOIN data_center d ON e.com_id=d.com_id
+	WHERE
+		e.esb_async_addr=#{host} AND e.esb_async_port=#{port} AND e.esb_async_tag=1
+	LIMIT 1
+	]]></select>
+
+	<select id="findBackupEndpoint" resultType="string"><![CDATA[
+	SELECT
+		CONCAT(e.esb_async_addr, ':', e.esb_async_port)
+	FROM
+		cfg_esb_async e
+	WHERE
+		e.esb_async_tag=1 AND e.esb_async_backup=1
+	LIMIT 1
+	]]></select>
+
+</mapper>

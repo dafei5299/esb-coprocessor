@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.NgxNodeDbMapper">
+
+	<select id="findByID" resultType="NgxNodeModel"><![CDATA[
+	SELECT
+		e.esb_id      id,
+		e.esb_addr    host,
+		e.esb_port    port,
+		e.esb_weight  weight,
+		e.esb_allowed enable,
+		e.com_id      datacenterID
+	FROM
+		cfg_esb e
+	WHERE
+		e.esb_id=#{id}
+	]]></select>
+
+	<update id="save"><![CDATA[
+	UPDATE cfg_esb
+	SET
+		esb_status=#{available}
+	WHERE
+		esb_id=#{id}
+	]]></update>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		e.esb_id
+	FROM
+		cfg_esb e
+	]]></select>
+
+	<select id="getConcurrencyEstimatePerNgxNode" resultType="int"><![CDATA[
+	SELECT
+		IFNULL(SUM(c.conf_value), 1999)
+	FROM
+		config_esb c
+	WHERE
+		c.conf_key='esb_concurrence'
+	LIMIT 1
+	]]></select>
+
+</mapper>

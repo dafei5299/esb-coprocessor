@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.ApiDbMapper">
+
+	<select id="findParamsByID" resultType="ApiParamModel"><![CDATA[
+	SELECT
+		ap.param_id   id,
+		ap.param_key  field,
+		ap.param_type type
+	FROM
+		cfg_api_params ap
+	WHERE
+		ap.api_id=#{id}
+	]]></select>
+
+	<select id="findByID" resultMap="ApiMap"><![CDATA[
+	SELECT
+		a.api_id, a.api_tag, a.api_uri,
+		CASE a.api_method WHEN 1 THEN 'GET' WHEN 0 THEN 'POST' END method,
+		a.api_timeout, a.api_version, a.api_version_used, a.api_sql_infu, a.api_allowed, a.api_target_debug,
+		IFNULL(l.limit_delay, 3000)           requestDeferred,
+		IFNULL(l.api_delay_multi, 10)       deferredTriggerFactor, 
+		IFNULL(l.limit_request, 0)          frequencyLimit,
+		IFNULL(l.limit_request_circle, 0)   frequencyPeriod,
+		IFNULL(l.limit_bandwidth, 0)        throughputLimit,
+		IFNULL(l.limit_bandwidth_circle, 0) throughputPeriod,
+		IFNULL(l.limit_connect, 0)          connectionLimit,
+		a.group_id
+	FROM
+		cfg_api a LEFT JOIN cfg_limit l ON a.limit_id=l.limit_id
+	WHERE
+		a.api_id=#{id}
+	]]></select>
+
+	<resultMap id="ApiMap" type="ApiModel">
+		<id column="api_id" property="id" />
+		<result column="api_tag" property="name" />
+		<result column="api_uri" property="uri" />
+		<result column="method" property="method" />
+		<result column="api_timeout" property="timeout" />
+		<result column="api_version" property="version" />
+		<result column="api_version_used" property="defaultVersion" />
+		<result column="api_sql_infu" property="injectionDetection" />
+		<result column="api_allowed" property="enable" />
+		<result column="api_target_debug" property="test" />
+		<result column="requestDeferred" property="requestDeferred" />
+		<result column="deferredTriggerFactor" property="deferredTriggerFactor" />
+		<result column="frequencyLimit" property="frequencyLimit" />
+		<result column="frequencyPeriod" property="frequencyPeriod" />
+		<result column="throughputLimit" property="throughputLimit" />
+		<result column="throughputPeriod" property="throughputPeriod" />
+		<result column="connectionLimit" property="connectionLimit" />
+		<result column="group_id" property="groupID" />
+		<collection column="api_id" select="findParamsByID"
+			property="params" />
+	</resultMap>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		a.api_id
+	FROM
+		cfg_api a
+	]]></select>
+
+</mapper>

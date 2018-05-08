@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.portal.esb.coproc.mapper.main.SystemDbMapper">
+
+	<select id="findByID" resultType="SystemModel"><![CDATA[
+	SELECT
+		s.sys_id                   id,
+		s.sys_tag                  name,
+		s.sys_debug                debug,
+		IFNULL(s.sys_debugkey, '') debugKey,
+		s.sys_clear_trans          transparent,
+		s.sys_auto_admin           autoAdjust,
+		s.sys_allowed              enable,
+		s.sys_uri                  discoverUri,
+		0                          deferredTriggerFactor,
+		IFNULL(l.limit_delay, 0)              requestDeferred,
+		IFNULL(l.limit_request, 0)          frequencyLimit,
+		IFNULL(l.limit_request_circle, 0)   frequencyPeriod,
+		IFNULL(l.limit_bandwidth, 0)        throughputLimit,
+		IFNULL(l.limit_bandwidth_circle, 0) throughputPeriod,
+		IFNULL(l.limit_connect, 0)          connectionLimit,
+		IFNULL(l.limit_sys_connect, 0)            concurrencyEstimate
+	FROM
+		cfg_sys s LEFT JOIN cfg_limit l ON s.limit_id=l.limit_id
+	WHERE
+		s.sys_id=#{id}
+	]]></select>
+
+	<select id="findIDs" resultType="long"><![CDATA[
+	SELECT
+		s.sys_id
+	FROM
+		cfg_sys s
+	]]></select>
+
+</mapper>

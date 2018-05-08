@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} %-5level [%thread] %logger{64}:%line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+	<logger name="cn.portal.esb.coproc" level="DEBUG" />
+	<logger name="cn.portal.esb.coproc.mapper" level="INFO" />
+	<logger name="org.springframework" level="WARN" />
+	<logger name="org.apache.zookeeper" level="WARN" />
+</configuration>
